@@ -4,7 +4,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { Textarea } from "@/components/ui/textarea";
-import { Checkbox } from "@/components/ui/checkbox";
 import { Button } from "@/components/ui/button";
 
 import {
@@ -16,36 +15,48 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import addTodos from "@/app/actions/AddTodo";
+import { ITodo } from "@/types";
 
 const formSchema = z.object({
-  tittle: z.string().min(2, {
-    message: "tittle must be at least 2 characters.",
+  title: z.string().min(2, {
+    message: "Title must be at least 2 characters.",
   }),
   description: z.string().min(2, {
-    message: "description must be at least 2 characters.",
+    message: "Description must be at least 2 characters.",
   }),
   dueDate: z.string(),
 });
 
-export function TodoForm() {
-  const form = useForm<z.infer<typeof formSchema>>({
+export function TodoForm({
+  onAddTodo,
+}: {
+  onAddTodo: (todos: ITodo[]) => void;
+}) {
+  const form = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      tittle: "",
+      title: "",
+      description: "",
+      dueDate: "",
     },
   });
-  function onSubmit(values: z.infer<typeof formSchema>) {
+
+  const onSubmit = async (values: ITodo) => {
     console.log(values);
-  }
+    const newTodos = await addTodos(values);
+    onAddTodo(newTodos);
+  };
+
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-3 p-4">
         <FormField
           control={form.control}
-          name="tittle"
+          name="title"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Tittle</FormLabel>
+              <FormLabel>Title</FormLabel>
               <FormControl>
                 <Input placeholder="shadcn" {...field} />
               </FormControl>
