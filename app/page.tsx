@@ -1,10 +1,10 @@
-"use client"
+"use client";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
 export default function Home() {
   const router = useRouter();
   return (
-    <main className="flex flex-col justify-center h-screen bg-sky-100">
+    <main className="flex relative flex-col justify-center h-screen bg-sky-100">
       {/* welcome to super todo app */}
       <h1 className="text-4xl font-bold text-center text-sky-900">
         Welcome to Super Todo App
@@ -15,6 +15,10 @@ export default function Home() {
       <div className="flex justify-center mt-4">
         <Button onClick={() => router.push("/todo")}>Get Start</Button>
       </div>
+      {/* fotter */}
+      <footer className="absolute bottom-0 w-full text-center text-sky-500">
+        <p>© 2021 Super Todo App</p>
+      </footer>
     </main>
   );
 }
