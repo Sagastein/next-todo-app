@@ -8,6 +8,7 @@ import {
   DrawerHeader,
   DrawerTitle,
 } from "@/components/ui/drawer";
+import { Suspense } from "react";
 import { TodoForm } from "@/components/ui/AddTodoForm";
 import { EditTodoForm } from "@/components/EditTodoForm";
 import getTodos from "../actions/getTodos";
@@ -65,12 +66,14 @@ function Page() {
             <FilterButtons />
             <SortButtons />
           </div>
-          <TodoList
-            todos={todos}
-            onMarkAsDone={handleMarkAsDone}
-            onDelete={handleDelete}
-            onEdit={setEditTodo}
-          />
+          <Suspense fallback={<div>loading todos</div>}>
+            <TodoList
+              todos={todos}
+              onMarkAsDone={handleMarkAsDone}
+              onDelete={handleDelete}
+              onEdit={setEditTodo}
+            />
+          </Suspense>
         </main>
 
         <DrawerContent>
