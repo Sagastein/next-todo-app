@@ -20,6 +20,7 @@ import { Header } from "@/components/Header";
 import { FilterButtons } from "@/components/FilterButtons";
 import { SortButtons } from "@/components/SortButtons";
 import { TodoList } from "@/components/TodoList";
+import { ModeToggle } from "@/components/ui/theme-toggle";
 
 function Page() {
   const [todos, setTodos] = useState([] as ITodo[]);
@@ -61,6 +62,9 @@ function Page() {
     <div className="flex flex-col h-screen bg-background">
       <Drawer onClose={() => setEditTodo(null)}>
         <Header />
+        <div className="flex justify-end items-center">
+          <ModeToggle />
+        </div>
         <main className="flex-1 overflow-y-auto p-6">
           <div className="flex items-center justify-between mb-6">
             <FilterButtons />
