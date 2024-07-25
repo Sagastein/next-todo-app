@@ -65,7 +65,6 @@ function Page() {
         <div className="flex justify-end items-center">
           <ModeToggle />
         </div>
-
         <main className="flex-1 overflow-y-auto p-6">
           <div className="flex items-center justify-between mb-6">
             <FilterButtons />
