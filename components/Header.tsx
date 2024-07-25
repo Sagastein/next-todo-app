@@ -1,5 +1,6 @@
 import { DrawerTrigger } from "@/components/ui/drawer";
 import { PlusIcon } from "lucide-react";
+import { ModeToggle } from "./ui/theme-toggle";
 
 export function Header() {
   return (
