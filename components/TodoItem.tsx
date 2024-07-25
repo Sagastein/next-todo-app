@@ -7,7 +7,7 @@ import {
   TooltipContent,
 } from "@/components/ui/tooltip";
 import { DrawerTrigger } from "@/components/ui/drawer";
-import { FilePenLine, Trash2Icon } from "lucide-react";
+import { FilePenLine, Trash2Icon, GripVertical } from "lucide-react";
 
 interface TodoItemProps {
   todo: ITodo;
@@ -23,22 +23,22 @@ export function TodoItem({
   onEdit,
 }: TodoItemProps) {
   return (
-    <li
-      className={`bg-card p-4 hover:bg-slate-100 duration-200 delay-200 cursor-pointer rounded-lg flex items-center justify-between ${
+    <div
+      className={`bg-card p-4 rounded-lg flex items-center justify-between ${
         todo.isCompleted ? "line-through" : ""
       }`}
     >
       <div className="flex items-center gap-4">
+        <GripVertical className="h-5 w-5 text-muted-foreground cursor-move" />
         <Checkbox
-          defaultChecked={todo.isCompleted}
+          checked={todo.isCompleted}
           onCheckedChange={(checked) =>
             todo.id && onMarkAsDone(todo.id, Boolean(checked))
           }
         />
         <div className="grid gap-1">
           <p className="text-card-foreground">{todo.title}</p>
-          <p className="text-sm text-muted-foreground">{todo.description}</p>
-          <p className="text-xs text-gray-400">Due date: {todo.dueDate}</p>
+          <p className="text-xs text-muted-foreground">{todo.description}</p>
         </div>
       </div>
       <div className="flex items-center gap-12">
@@ -65,6 +65,6 @@ export function TodoItem({
           </Tooltip>
         </TooltipProvider>
       </div>
-    </li>
+    </div>
   );
 }

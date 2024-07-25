@@ -1,12 +1,15 @@
+import React from "react";
 import { ITodo } from "@/types";
 import { TodoItem } from "./TodoItem";
 import { Separator } from "@/components/ui/separator";
-import { Fragment } from "react";
+import { List, arrayMove } from "react-movable";
+
 interface TodoListProps {
   todos: ITodo[];
   onMarkAsDone: (id: string, isCompleted: boolean) => void;
   onDelete: (id: string) => void;
   onEdit: (todo: ITodo) => void;
+  onReorder: (newTodos: ITodo[]) => void;
 }
 
 export function TodoList({
@@ -14,21 +17,30 @@ export function TodoList({
   onMarkAsDone,
   onDelete,
   onEdit,
+  onReorder,
 }: TodoListProps) {
   return (
-    <ul className="space-y-2">
-      {todos.map((todo) => (
-        <Fragment key={todo.id}>
+    <List
+      values={todos}
+      onChange={({ oldIndex, newIndex }) =>
+        onReorder(arrayMove(todos, oldIndex, newIndex))
+      }
+      renderList={({ children, props }) => (
+        <ul {...props} className="space-y-4">
+          {children}
+        </ul>
+      )}
+      renderItem={({ value, props }) => (
+        <li {...props}>
           <TodoItem
-            key={todo.id}
-            todo={todo}
+            todo={value}
             onMarkAsDone={onMarkAsDone}
             onDelete={onDelete}
             onEdit={onEdit}
           />
-          <Separator className="p-0 my-1" />
-        </Fragment>
-      ))}
-    </ul>
+          <Separator />
+        </li>
+      )}
+    />
   );
 }

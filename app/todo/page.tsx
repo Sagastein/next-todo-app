@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect, Fragment } from "react";
+import { useState, useEffect } from "react";
 import {
   Drawer,
   DrawerClose,
@@ -8,7 +8,6 @@ import {
   DrawerHeader,
   DrawerTitle,
 } from "@/components/ui/drawer";
-import { Suspense } from "react";
 import { TodoForm } from "@/components/ui/AddTodoForm";
 import { EditTodoForm } from "@/components/EditTodoForm";
 import getTodos from "../actions/getTodos";
@@ -58,9 +57,13 @@ function Page() {
     setEditTodo(null);
   };
 
+  const handleReorder = (newTodos: ITodo[]) => {
+    setTodos(newTodos);
+  };
+
   return (
     <div className="flex flex-col h-screen bg-background">
-      <Drawer onClose={() => setEditTodo(null)}>
+      <Drawer>
         <Header />
         <div className="flex justify-end items-center">
           <ModeToggle />
@@ -70,14 +73,13 @@ function Page() {
             <FilterButtons />
             <SortButtons />
           </div>
-          <Suspense fallback={<div>loading todos</div>}>
-            <TodoList
-              todos={todos}
-              onMarkAsDone={handleMarkAsDone}
-              onDelete={handleDelete}
-              onEdit={setEditTodo}
-            />
-          </Suspense>
+          <TodoList
+            todos={todos}
+            onMarkAsDone={handleMarkAsDone}
+            onDelete={handleDelete}
+            onEdit={setEditTodo}
+            onReorder={handleReorder}
+          />
         </main>
 
         <DrawerContent>
@@ -94,10 +96,7 @@ function Page() {
             )}
           </DrawerHeader>
           <DrawerFooter>
-            <DrawerClose
-              onClick={() => setEditTodo(null)}
-              className="bg-red-600 text-primary-foreground hover:bg-red-400 p-2 rounded-md"
-            >
+            <DrawerClose className="bg-red-600 text-primary-foreground hover:bg-red-400 p-2 rounded-md">
               Cancel
             </DrawerClose>
           </DrawerFooter>
