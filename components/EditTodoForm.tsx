@@ -1,6 +1,8 @@
 "use client";
 import { useState } from "react";
 import { ITodo } from "@/types";
+import { Input } from "./ui/input";
+import { Textarea } from "./ui/textarea";
 
 interface EditTodoFormProps {
   todo: ITodo | null;
@@ -25,7 +27,7 @@ export function EditTodoForm({ todo, onSave, onCancel }: EditTodoFormProps) {
         <label htmlFor="title" className="block text-sm font-medium">
           Title
         </label>
-        <input
+        <Input
           type="text"
           id="title"
           value={title}
@@ -37,7 +39,7 @@ export function EditTodoForm({ todo, onSave, onCancel }: EditTodoFormProps) {
         <label htmlFor="description" className="block text-sm font-medium">
           Description
         </label>
-        <textarea
+        <Textarea
           id="description"
           value={description}
           onChange={(e) => setDescription(e.target.value)}

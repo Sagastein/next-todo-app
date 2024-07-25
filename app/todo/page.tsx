@@ -1,14 +1,5 @@
 "use client";
-import { useState, useEffect } from "react";
-import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
-import { Separator } from "@/components/ui/separator";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
+import { useState, useEffect, Fragment } from "react";
 import {
   Drawer,
   DrawerClose,
@@ -16,23 +7,19 @@ import {
   DrawerFooter,
   DrawerHeader,
   DrawerTitle,
-  DrawerTrigger,
 } from "@/components/ui/drawer";
-
-import {
-  PlusIcon,
-  Trash2Icon,
-  FilterIcon,
-  ListOrderedIcon,
-  FilePenLine,
-} from "lucide-react";
+import { Suspense } from "react";
 import { TodoForm } from "@/components/ui/AddTodoForm";
 import { EditTodoForm } from "@/components/EditTodoForm";
 import getTodos from "../actions/getTodos";
 import deleteTodos from "../actions/DeleteDoto";
 import markAsDone from "../actions/markAsDone";
-import updateTodo from "../actions/editTodos"; // Import the refactored action
+import updateTodo from "../actions/editTodos";
 import { ITodo } from "@/types";
+import { Header } from "@/components/Header";
+import { FilterButtons } from "@/components/FilterButtons";
+import { SortButtons } from "@/components/SortButtons";
+import { TodoList } from "@/components/TodoList";
 
 function Page() {
   const [todos, setTodos] = useState([] as ITodo[]);
@@ -72,93 +59,21 @@ function Page() {
 
   return (
     <div className="flex flex-col h-screen bg-background">
-      <Drawer>
-        <header className="bg-primary text-primary-foreground py-4 px-6 flex items-center justify-between">
-          <h1 className="text-2xl font-bold">Todo App</h1>
-
-          <span className="sr-only">Add Todo</span>
-          <DrawerTrigger className="rounded-full">
-            <PlusIcon className="h-5 w-5" />
-          </DrawerTrigger>
-        </header>
+      <Drawer onClose={() => setEditTodo(null)}>
+        <Header />
         <main className="flex-1 overflow-y-auto p-6">
           <div className="flex items-center justify-between mb-6">
-            <div className="flex items-center gap-4">
-              <Button variant="outline" size="sm">
-                Today
-              </Button>
-              <Button variant="outline" size="sm">
-                Uncompleted
-              </Button>
-              <Button variant="outline" size="sm">
-                Completed
-              </Button>
-            </div>
-            <div className="flex items-center gap-4">
-              <Button variant="ghost" size="icon" className="rounded-full">
-                <FilterIcon className="h-4 w-4 text-muted-foreground" />
-                <span className="sr-only">Filter Todos</span>
-              </Button>
-              <Button variant="ghost" size="icon" className="rounded-full">
-                <ListOrderedIcon className="h-4 w-4 text-muted-foreground" />
-                <span className="sr-only">Sort Todos</span>
-              </Button>
-            </div>
+            <FilterButtons />
+            <SortButtons />
           </div>
-          <ul className="space-y-4">
-            {todos.map((todo) => (
-              <li
-                key={todo.id}
-                className={`bg-card p-4 rounded-lg flex items-center justify-between ${
-                  todo.isCompleted ? "line-through" : ""
-                }`}
-              >
-                <div className="flex items-center gap-4">
-                  <Checkbox
-                    defaultChecked={todo.isCompleted}
-                    onCheckedChange={(checked) =>
-                      todo.id && handleMarkAsDone(todo.id, Boolean(checked))
-                    }
-                  />
-                  <div className="grid gap-1">
-                    <p className="text-card-foreground">{todo.title}</p>
-                    <p className="text-xs text-muted-foreground">
-                      {todo.description}
-                    </p>
-                  </div>
-                </div>
-
-                <div className="flex items-center gap-12">
-                  <TooltipProvider>
-                    <Tooltip>
-                      <TooltipTrigger onClick={() => setEditTodo(todo)}>
-                        <DrawerTrigger>
-                          <FilePenLine className="h-4 w-4 text-muted-foreground" />
-                          <span className="sr-only">Edit Todo</span>
-                        </DrawerTrigger>
-                      </TooltipTrigger>
-
-                      <TooltipContent>
-                        <p>Edit Todo</p>
-                      </TooltipContent>
-                    </Tooltip>
-                    <Tooltip>
-                      <TooltipTrigger
-                        onClick={() => todo.id && handleDelete(todo.id)}
-                      >
-                        <Trash2Icon className="h-4 w-4 text-muted-foreground" />
-                        <span className="sr-only">Delete Todo</span>
-                      </TooltipTrigger>
-                      <TooltipContent>
-                        <p>Delete Todo</p>
-                      </TooltipContent>
-                    </Tooltip>
-                  </TooltipProvider>
-                </div>
-              </li>
-            ))}
-            <Separator />
-          </ul>
+          <Suspense fallback={<div>loading todos</div>}>
+            <TodoList
+              todos={todos}
+              onMarkAsDone={handleMarkAsDone}
+              onDelete={handleDelete}
+              onEdit={setEditTodo}
+            />
+          </Suspense>
         </main>
 
         <DrawerContent>
@@ -175,7 +90,10 @@ function Page() {
             )}
           </DrawerHeader>
           <DrawerFooter>
-            <DrawerClose className="bg-red-600 text-primary-foreground hover:bg-red-400 p-2 rounded-md">
+            <DrawerClose
+              onClick={() => setEditTodo(null)}
+              className="bg-red-600 text-primary-foreground hover:bg-red-400 p-2 rounded-md"
+            >
               Cancel
             </DrawerClose>
           </DrawerFooter>
