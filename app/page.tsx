@@ -17,7 +17,7 @@ export default function Home() {
       </div>
       {/* fotter */}
       <footer className="absolute bottom-0 w-full text-center text-sky-500">
-        <p>© 2021 Super Todo App</p>
+        <p>© 2024 Super Todo App</p>
       </footer>
     </main>
   );
