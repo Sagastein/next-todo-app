@@ -24,7 +24,7 @@
     "date-fns": "^3.6.0",
     "drizzle-orm": "^0.32.1",
     "lucide-react": "^0.414.0",
-    "next": "14.2.5",
+    "next": "15.5.18",
     "next-themes": "^0.3.0",
     "react": "^18",
     "react-day-picker": "8.10.1",
